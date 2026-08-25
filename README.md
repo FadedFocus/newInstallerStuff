@@ -43,7 +43,7 @@ GitHub access token inside these scripts.
 ## Publishing this folder
 
 Create an empty GitHub repository named `newInstallerStuff`, then run the following
-from this folder after replacing the username:
+from this folder:
 
 ```powershell
 git init -b main

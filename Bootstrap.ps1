@@ -43,7 +43,7 @@ function Get-WingetPath {
     try {
         Add-AppxPackage -RegisterByFamilyName `
             -MainPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe' `
-            -ErrorAction Stop
+            -ErrorAction Stop | Out-Null
         Start-Sleep -Seconds 2
     }
     catch {
@@ -90,17 +90,27 @@ function Install-Git {
 
     Write-Step 'Git is not installed. Installing it with WinGet...'
 
-    & $WingetPath install `
+    $WingetOutput = @(& $WingetPath install `
         --id 'Git.Git' `
         --exact `
         --source 'winget' `
         --silent `
         --disable-interactivity `
         --accept-package-agreements `
-        --accept-source-agreements
+        --accept-source-agreements 2>&1)
 
     $WingetExitCode = $LASTEXITCODE
-    $GitPath = Get-GitPath
+
+    # Native command output is part of a PowerShell function's output stream
+    # unless it is consumed. Keep WinGet's messages visible without allowing
+    # them to become part of the Git path returned by this function.
+    foreach ($Line in $WingetOutput) {
+        if ($null -ne $Line) {
+            Write-Host $Line.ToString()
+        }
+    }
+
+    [string]$GitPath = Get-GitPath
 
     if (-not $GitPath) {
         throw "Git installation failed or Git could not be located. WinGet exit code: $WingetExitCode"

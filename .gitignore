@@ -1,0 +1,6 @@
+# Generated release bundles
+*.zip
+
+# Windows metadata
+Thumbs.db
+Desktop.ini

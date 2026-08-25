@@ -40,6 +40,29 @@ cannot provide the same zero-login first-run experience: the PC must authenticat
 with GitHub before it can read either the launcher or the installer. Never put a
 GitHub access token inside these scripts.
 
+## Windows 11 installation USB
+
+The same USB drive can hold both the official Windows 11 installation media and
+the PC Bootstrap launcher.
+
+1. Let Microsoft's Media Creation Tool finish creating the Windows 11 USB first.
+   It formats the drive, so anything copied beforehand would be erased.
+2. Copy `Start-PC-Bootstrap.cmd` to the root of the finished USB drive. Do not
+   alter or remove the Windows setup files and folders.
+3. Install Windows normally and finish the initial Windows setup until the normal
+   desktop appears.
+4. Connect the PC to the internet, open the USB drive in File Explorer, and
+   double-click `Start-PC-Bootstrap.cmd`.
+5. Approve the administrator prompt when it appears.
+
+The USB launcher downloads the latest `Bootstrap.ps1` from this repository each
+time, so the USB copy does not become stale when the installer changes. Do not
+run it from the Windows Setup command prompt: the setup environment does not
+reliably provide WinGet or the normal user profile that this installer needs.
+
+Recreating the Windows installation media formats the USB again. Copy
+`Start-PC-Bootstrap.cmd` back to the drive afterward.
+
 ## Publishing this folder
 
 Create an empty GitHub repository named `newInstallerStuff`, then run the following
